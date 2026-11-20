@@ -20,7 +20,7 @@ public class MainPage {
     @FindBy(xpath = "//div[@data-test='main-menu-item'and @data-test-marker = 'Products']") // and @data-test-marker = 'Developer Tools']")
     public WebElement toolsMenu;
 
-    @FindBy(css = "[data-test='site-header-search-action']")
+    @FindBy(xpath = "//header//button[@data-test='site-header-search-action']")
     public WebElement searchButton;
 
     @FindBy(css = "button[class='ch2-btn ch2-allow-all-btn ch2-btn-primary']")

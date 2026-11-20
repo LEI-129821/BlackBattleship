@@ -1,13 +1,15 @@
 package iscteiul.ista.blackbattleship;
 
 import org.junit.jupiter.api.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.logging.Level;
@@ -22,32 +24,34 @@ public class MainPageTest {
         Logger.getLogger("org.openqa.selenium").setLevel(Level.SEVERE);
 
         driver = new ChromeDriver();
-        driver.manage().window().maximize();
+        driver.manage().window().setSize(new Dimension(1920, 1080));
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         driver.get("https://www.jetbrains.com/");
-        
+
         mainPage = new MainPage(driver);
         mainPage.closePopUp();
     }
 
     @AfterEach
     public void tearDown() {
-      driver.quit();
+        driver.quit();
     }
 
-
     @Test
-    public void search() throws InterruptedException {
-        Thread.sleep(3000);
-        mainPage.searchButton.click();
-        //Thread.sleep(1000);
-        WebElement searchField = driver.findElement(By.cssSelector("[data-test-id='search-input']"));
+    public void search() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(mainPage.searchButton)).click();
+
+        WebElement searchField = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("[data-test-id='search-input']")));
         searchField.sendKeys("Selenium");
 
-        WebElement submitButton = driver.findElement(By.cssSelector("button[data-test='full-search-button']"));
+        WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("button[data-test='full-search-button']")));
         submitButton.click();
-        //Thread.sleep(1000);
-        WebElement searchPageField = driver.findElement(By.cssSelector("input[data-test-id='search-input']"));
+
+        WebElement searchPageField = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("input[data-test-id='search-input']")));
         assertEquals("Selenium", searchPageField.getAttribute("value"));
     }
 
